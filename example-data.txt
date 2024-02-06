@@ -1,0 +1,360 @@
+old temporary data in app.py for step 3.
+
+travelers_from_app_py = [
+    {
+        "travelerID": 1,
+        "name": "Pauline R. Gibson",
+        "email": "shanie1989@hotmail.com",
+        "phone": "917-204-3621"
+    },
+    {
+        "travelerID": 2,
+        "name": "Andrew N. Jones",
+        "email": "gillian2002@hotmail.com",
+        "phone": "832-277-9715"
+    },
+    {
+        "travelerID": 3,
+        "name": "Aaron M. Sandoval",
+        "email": "louisa2012@yahoo.com",
+        "phone": "732-644-0435"
+    },
+    {
+        "travelerID": 4,
+        "name": "Helen K. White",
+        "email": "twila.toy19@hotmail.com",
+        "phone": "269-416-6835"
+    },
+    {
+        "travelerID": 5,
+        "name": "Gail M. Castillo",
+        "email": "emelie.steh3@yahoo.com",
+        "phone": "217-246-6331"
+    }
+        ]
+
+itineraries_from_app_py = [
+    {
+        "planID": 1,
+        "departureFlightID": 1,
+        "returnFlightID": 2,
+        "stayID": 1,
+        "home": "Seattle",
+        "destination": "Los Angeles"
+    },
+    {
+        "planID": 2,
+        "departureFlightID": 3,
+        "returnFlightID": 1,
+        "stayID": 2,
+        "home": "Anaheim",
+        "destination": "Everett"
+    },
+    {
+        "planID": 3,
+        "departureFlightID": 4,
+        "returnFlightID": 2,
+        "stayID": 3,
+        "home": "Tacoma",
+        "destination": "San Bernardino"
+    }
+        ]
+
+flights_from_app_py = [
+    {
+        "flightID": 1,
+        "airline": "Alaska",
+        "departing": "SEA",
+        "destination": "LAX",
+        "departTime": "2023-11-11 05:15:00",
+        "arriveTime": "2023-11-11 08:15:00"
+    },
+    {
+        "flightID": 2,
+        "airline": "Delta",
+        "departing": "BUR",
+        "destination": "BFI",
+        "departTime": "2023-11-16 12:30:00",
+        "arriveTime": "2023-11-16 15:30:00"
+    },
+    {
+        "flightID": 3,
+        "airline": "United",
+        "departing": "ONT",
+        "destination": "PAE",
+        "departTime": "2023-11-04 07:00:00",
+        "arriveTime": "2023-11-04 11:00:00"
+    },
+    {
+        "flightID": 4,
+        "airline": "Southwest",
+        "departing": "BLI",
+        "destination": "SAN",
+        "departTime": "2023-10-25 15:00:00",
+        "arriveTime": "2023-10-25 20:00:00"
+    }
+        ]
+
+activities_from_app_py = [
+    {
+        "activityID": 1,
+        "activityName": "The Celestial Observatory Tower",
+        "activityDescription": "This observatory allows visitors to explore the cosmos and observe celestial objects through state-of-the-art telescopes. Guests can attend engaging astronomy shows, stargazing events, and even participate in guided tours.",
+        "activityLocation": "Los Angeles, CA"
+    },
+    {
+        "activityID": 2,
+        "activityName": "Urban Legends Mystery House",
+        "activityDescription": "This house is filled with rooms and passages that challenge your perceptions and boggle your mind. Explore optical illusions, solve puzzles, and uncover the secrets hidden within its walls.",
+        "activityLocation": "Los Angeles, CA"
+    },
+    {
+        "activityID": 3,
+        "activityName": "Whale Watcher's Haven",
+        "activityDescription": "Whale Watcher's Haven is a coastal sanctuary where visitors can embark on thrilling whale-watching expeditions. Climb aboard state-of-the-art vessels to witness majestic orcas, humpback whales, and other marine life in their natural habitat.",
+        "activityLocation": "Everett, WA"
+    }
+        ]
+
+
+activities_itineraries_from_app_py = [
+    {
+        "activitiesItinerariesID": 1,
+        "planID": 1,
+        "activityID": 1,
+    },
+    {
+        "activitiesItinerariesID": 2,
+        "planID": 3,
+        "activityID": 1,
+    },
+    {
+        "activitiesItinerariesID": 3,
+        "planID": 3,
+        "activityID": 2,
+    },
+    {
+        "activitiesItinerariesID": 4,
+        "planID": 2,
+        "activityID": 3,
+    }
+        ]
+
+travelers_itineraries_from_app_py = [
+    {
+        "travelersItinerariesID": 1,
+        "planID": 1,
+        "travelerID": 1,
+    },
+    {
+        "travelersItinerariesID": 2,
+        "planID": 1,
+        "travelerID": 2,
+    },
+    {
+        "travelersItinerariesID": 3,
+        "planID": 2,
+        "travelerID": 3,
+    },
+    {
+        "travelersItinerariesID": 4,
+        "planID": 3,
+        "travelerID": 4,
+    }
+        ]
+
+examples = [
+    {
+        "planID": 1,
+        "departureFlightID": "x",
+        "returnFlightID": "x",
+        "stayID": "x",
+        "home": "x",
+        "destination": "x"
+    }
+        ]
+
+activities_from_app_py = [
+    {
+        "activityID": 1,
+        "activityName": "The Celestial Observatory Tower",
+        "activityDescription": "This observatory allows visitors to explore the cosmos and observe celestial objects through state-of-the-art telescopes. Guests can attend engaging astronomy shows, stargazing events, and even participate in guided tours.",
+        "activityLocation": "Los Angeles, CA"
+    },
+    {
+        "activityID": 2,
+        "activityName": "Urban Legends Mystery House",
+        "activityDescription": "This house is filled with rooms and passages that challenge your perceptions and boggle your mind. Explore optical illusions, solve puzzles, and uncover the secrets hidden within its walls.",
+        "activityLocation": "Los Angeles, CA"
+    },
+    {
+        "activityID": 3,
+        "activityName": "Whale Watcher's Haven",
+        "activityDescription": "Whale Watcher's Haven is a coastal sanctuary where visitors can embark on thrilling whale-watching expeditions. Climb aboard state-of-the-art vessels to witness majestic orcas, humpback whales, and other marine life in their natural habitat.",
+        "activityLocation": "Everett, WA"
+    }
+        ]
+
+travelers_from_app_py = [
+    {
+        "travelerID": 1,
+        "name": "Pauline R. Gibson",
+        "email": "shanie1989@hotmail.com",
+        "phone": "917-204-3621"
+    },
+    {
+        "travelerID": 2,
+        "name": "Andrew N. Jones",
+        "email": "gillian2002@hotmail.com",
+        "phone": "832-277-9715"
+    },
+    {
+        "travelerID": 3,
+        "name": "Aaron M. Sandoval",
+        "email": "louisa2012@yahoo.com",
+        "phone": "732-644-0435"
+    },
+    {
+        "travelerID": 4,
+        "name": "Helen K. White",
+        "email": "twila.toy19@hotmail.com",
+        "phone": "269-416-6835"
+    },
+    {
+        "travelerID": 5,
+        "name": "Gail M. Castillo",
+        "email": "emelie.steh3@yahoo.com",
+        "phone": "217-246-6331"
+    }
+        ]
+
+itineraries_from_app_py = [
+    {
+        "planID": 1,
+        "departureFlightID": 1,
+        "returnFlightID": 2,
+        "stayID": 1,
+        "home": "Seattle",
+        "destination": "Los Angeles"
+    },
+    {
+        "planID": 2,
+        "departureFlightID": 3,
+        "returnFlightID": 1,
+        "stayID": 2,
+        "home": "Anaheim",
+        "destination": "Everett"
+    },
+    {
+        "planID": 3,
+        "departureFlightID": 4,
+        "returnFlightID": 2,
+        "stayID": 3,
+        "home": "Tacoma",
+        "destination": "San Bernardino"
+    }
+        ]
+
+flights_from_app_py = [
+    {
+        "flightID": 1,
+        "airline": "Alaska",
+        "departing": "SEA",
+        "destination": "LAX",
+        "departTime": "2023-11-11 05:15:00",
+        "arriveTime": "2023-11-11 08:15:00"
+    },
+    {
+        "flightID": 2,
+        "airline": "Delta",
+        "departing": "BUR",
+        "destination": "BFI",
+        "departTime": "2023-11-16 12:30:00",
+        "arriveTime": "2023-11-16 15:30:00"
+    },
+    {
+        "flightID": 3,
+        "airline": "United",
+        "departing": "ONT",
+        "destination": "PAE",
+        "departTime": "2023-11-04 07:00:00",
+        "arriveTime": "2023-11-04 11:00:00"
+    },
+    {
+        "flightID": 4,
+        "airline": "Southwest",
+        "departing": "BLI",
+        "destination": "SAN",
+        "departTime": "2023-10-25 15:00:00",
+        "arriveTime": "2023-10-25 20:00:00"
+    }
+        ]
+
+accommodations_from_app_py = [
+    {
+        "stayID": 1,
+        "propertyName": "Holiday Inn",
+        "propertyAddress": "453 Rainbow Road, Los Angeles, California(CA), 90014",
+        "propertyPhone": "626-271-4464",
+        "propertyEmail": "rainbow@holidayinn.com",
+        "checkInDate": "2023-11-11 ",
+        "checkOutDate": "2023-11-16 "
+    },
+    {
+        "stayID": 2,
+        "propertyName": None,
+        "propertyAddress": "4520 Joy Lane, Everett, Washington(WA), 98201",
+        "propertyPhone": None,
+        "propertyEmail": "camilla@airbnb.com",
+        "checkInDate": "2023-11-04 ",
+        "checkOutDate": "2023-11-11 "
+    },
+    {
+        "stayID": 3,
+        "propertyName": "Motel 6",
+        "propertyAddress": "4175 Zimmerman Lane, Los Angeles, California(CA), 90017",
+        "propertyPhone": "213-542-7860",
+        "propertyEmail": "manager@motel6.com",
+        "checkInDate": "2023-10-25 ",
+        "checkOutDate": "2023-11-16"
+    }
+        ]
+
+
+activity_ratings_from_app_py = [
+    {
+        "ratingID": 1,
+        "activityID": 1,
+        "travelerID": 4,
+        "rating": True,
+        "review": "The shows were amazing and spectacular! You can really tell that a lot of thought and effort was put into this place. The employees here are very passionate about their jobs as well which makes it all a very enjoyable experience!",
+    },
+    {
+        "ratingID": 2,
+        "activityID": 2,
+        "travelerID": 5,
+        "rating": True,
+        "review": "It was very intriguting and challenging but that's part of the fun! Definitely come here if you want some mental stimulation! ",
+    },
+    {
+        "ratingID": 3,
+        "activityID": 2,
+        "travelerID": 3,
+        "rating": False,
+        "review": "It was too confusing, and difficult and I could not figure anything out.",
+    },
+    {
+        "ratingID": 4,
+        "activityID": 3,
+        "travelerID": 1,
+        "rating": True,
+        "review": "Whale Watcher's Haven is a dream come true! Saw orcas up close, and it left me speechless. Unforgettable experience. A must-visit!",
+    },
+    {
+        "ratingID": 5,
+        "activityID": 3,
+        "travelerID": 2,
+        "rating": True,
+        "review": "We spotted humpback whales and dolphins. The crew was fantastic. Highly recommended for nature lovers.",
+    }
+        ]

@@ -1,0 +1,179 @@
+{% extends "main.j2" %}
+{% block title %}Flights{% endblock %}
+{% block name %}<h2>Flights</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering/operations:
+    Date: 11/30/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <!-- Loops through every item -->
+                    {% for item in data %}
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateFlight" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteFlight" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+
+<!-- Insert a new flight -->
+        <form id="AddFlight" action="/flights" method="post">
+            <fieldset>     
+                <legend><Strong>Add Flight</Strong></legend>
+                <label for="airline"> Airline </label> 
+                <input type="text" id="airline" name="airline" placeholder="United" required>
+                
+                <label for="departing"> Departing </label> 
+                <input type="text" id="departing" name="departing" placeholder="LAX" required>
+
+                <label for="destination"> Destination </label> 
+                <input type="text" id="destination" name="destination" placeholder="IAH" required>
+                
+                <label for="departTime"> Depart Time </label> 
+                <input type="datetime-local" id="departTime" name="departTime" required>
+
+                <label for="arriveTime"> Arrive Time </label> 
+                <input type="datetime-local" id="arriveTime" name="arriveTime" required>
+                
+                <button type="submit" value="Add Flight" id="AddFlight" name="AddFlight">Add Flight</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("airline").value = "";
+                document.getElementById("departing").value = "";
+                document.getElementById("destination").value = "";
+                document.getElementById("departTime").value = "";
+                document.getElementById("arriveTime").value = "";
+            }
+        </script>
+
+
+<!-- Update a selected flight -->
+        <form id="UpdateFlight" action="/flights" method="post">
+            <fieldset>     
+                <legend><Strong>Update Flight</Strong></legend>
+                <label> Flight ID: </label>
+                <input type="number" id="updateFlightID" name="flightID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="airline"> Airline </label> 
+                <input type="text" id="updateAirline" name="airline" placeholder="United" required>
+                
+                <label for="departing"> Departing </label> 
+                <input type="text" id="updateDeparting" name="departing" placeholder="LAX" required>
+
+                <label for="destination"> Destination </label> 
+                <input type="text" id="updateDestination" name="destination" placeholder="IAH" required>
+                
+                <label for="departTime"> Depart Time </label> 
+                <input type="datetime-local" id="updateDepartTime" name="departTime" required>
+
+                <label for="arriveTime"> Arrive Time </label> 
+                <input type="datetime-local" id="updateArriveTime" name="arriveTime" required>
+                
+                <button type="submit" value="Update Flight" id="UpdateFlight" name="UpdateFlight">Update Flight</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updateAirline").value = "";
+                document.getElementById("updateDeparting").value = "";
+                document.getElementById("updateDestination").value = "";
+                document.getElementById("updateDepartTime").value = "";
+                document.getElementById("updateArriveTime").value = "";
+                document.getElementById("updateFlightID").value = "";
+            }
+            // Populates field when Edit is clicked
+            function insertID(item) {
+                document.getElementById("updateFlightID").value = item['Flight ID'];
+                document.getElementById("updateAirline").value = item['Airline'];
+                document.getElementById("updateDeparting").value = item['Departing'];
+                document.getElementById("updateDestination").value = item['Destination'];
+                document.getElementById("updateDepartTime").value = item['Depart Time'];
+                document.getElementById("updateArriveTime").value = item['Arrive Time'];
+
+            }
+        </script>
+        
+        
+<!-- Delete a selected flight -->
+        <form id="DeleteFlight" action="/flights" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Flight</Strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <label> Flight ID: </label>
+                <input type="number" id="deleteFlightID" name="flightID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="airline"> Airline </label> 
+                <input type="text" id="deleteAirline" name="airline" disabled required>
+                
+                <label for="departing"> Departing </label> 
+                <input type="text" id="deleteDeparting" name="departing" disabled required>
+
+                <label for="destination"> Destination </label> 
+                <input type="text" id="deleteDestination" name="destination" disabled required>
+                
+                <label for="departTime"> Depart Time </label> 
+                <input type="text" id="deleteDepartTime" name="departTime" disabled required>
+
+                <label for="arriveTime"> Arrive Time </label> 
+                <input type="text" id="deleteArriveTime" name="arriveTime" disabled required>
+                
+                <button type="submit" value="Delete Flight" id="DeleteFlight" name="DeleteFlight">Delete Flight</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deleteAirline").value = "";
+                document.getElementById("deleteDeparting").value = "";
+                document.getElementById("deleteDestination").value = "";
+                document.getElementById("deleteDepartTime").value = "";
+                document.getElementById("deleteArriveTime").value = "";
+                document.getElementById("deleteFlightID").value = "";
+            }
+            // Populates field when Delete is clicked
+            function deleteID(item) {
+                console.log(item)
+                document.getElementById("deleteAirline").value = item['Airline'];
+                document.getElementById("deleteDeparting").value = item['Departing'];
+                document.getElementById("deleteDestination").value = item['Destination'];
+                document.getElementById("deleteDepartTime").value = item['Depart Time'];
+                document.getElementById("deleteArriveTime").value = item['Arrive Time'];
+                document.getElementById("deleteFlightID").value = item['Flight ID'];
+            }
+        </script>
+
+{% endblock %}
+           

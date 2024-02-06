@@ -1,0 +1,158 @@
+{% extends "main.j2" %}
+{% block title %}Activities{% endblock %}
+{% block name %}<h2>Activities</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 11/30/2023
+    Based on:[redacted]
+    Source URL: [redacted]
+-->
+        
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <!-- Loops through every item -->
+                    {% for item in data %}
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateActivity" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteActivity" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        <p>
+        To see itineraries associated with these activities, visit <a href="/activities-itineraries">Activities_Itineraries</a>.<br />
+        To see ratings associated with these activities, visit <a href="/activity-ratings">ActivityRatings</a>.
+        </p>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+<!-- Insert a new Activity -->
+        <form id="InsertActivity" action="/activities" method="post">
+
+            <fieldset>     
+                <legend><Strong>Add Activity</Strong></legend>
+
+                <label for="activityName"> Activity Name </label>
+                <input type="text" id="activityName" name="activityName" placeholder="Fun Thing" required>
+
+                <label for="activityDescription"> Description </label>
+                <input type="text" id="activityDescription" name="activityDescription" placeholder="It's an adventure!" required>
+
+                <label for="activityLocation"> Location </label>
+                <input type="text" id="activityLocation" name="activityLocation" placeholder="Downtown" required>
+                
+                <button type="submit" value="Add Activity" id="AddActivity" name="AddActivity">Add Activity</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("activityName").value = "";
+                document.getElementById("activityDescription").value = "";
+                document.getElementById("activityLocation").value = "";
+            }
+        </script>
+
+
+<!-- Update an Activity -->
+        <form id="UpdateActivity" action="/activities" method="post">
+            <fieldset>     
+                <legend><Strong>Update Activity</Strong></legend>
+
+                <label>Activity ID:</label>
+                <input type="number" id="updateActivityID" name="activityID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="activityName"> Activity Name  </label>
+                <input type="text" id="updateName" name="activityName" placeholder="Fun Thing" required>
+
+                <label for="activityDescription"> Description </label>
+                <input type="text" id="updateDescription" name="activityDescription" placeholder="It's an adventure!" required>
+
+                <label for="activityLocation"> Location </label>
+                <input type="text" id="updateLocation" name="activityLocation" placeholder="Downtown" required>
+                
+                <button type="submit" value="Update Activity" id="UpdateActivity" name="UpdateActivity">Update Activity</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updateActivityID").value = "";
+                document.getElementById("updateName").value = "";
+                document.getElementById("updateDescription").value = "";
+                document.getElementById("updateLocation").value = "";
+            }
+            // Populates form fields when Edit is clicked
+            function insertID(item) {
+                document.getElementById("updateActivityID").value = item['Activity ID'];
+                document.getElementById("updateName").value = item['Name'];
+                document.getElementById("updateDescription").value = item['Description'];
+                document.getElementById("updateLocation").value = item['Location'];
+            }
+        </script>
+
+<!-- Delete an Activity -->
+
+        <form id="DeleteActivity" action="/activities" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Activity</Strong></legend>
+
+                <p>Are you sure you wish to delete the following?</p>
+
+                <label>Activity ID:</label>
+                <input type="number" id="deleteActivityID" name="activityID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="activityName"> Activity Name  </label>
+                <input type="text" id="deleteName" name="activityName" disabled required>
+
+                <label for="activityDescription"> Description </label>
+                <input type="text" id="deleteDescription" name="activityDescription" disabled required>
+
+                <label for="activityLocation"> Location </label>
+                <input type="text" id="deleteLocation" name="activityLocation" disabled required>
+                
+                <button type="submit" value="Delete Activity" id="DeleteActivity" name="DeleteActivity">Delete Activity</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deleteActivityID").value = "";
+                document.getElementById("deleteName").value = "";
+                document.getElementById("deleteDescription").value = "";
+                document.getElementById("deleteLocation").value = "";
+            }
+            // Populates form fields when Delete is clicked 
+            function deleteID(item) {
+                document.getElementById("deleteActivityID").value = item['Activity ID'];
+                document.getElementById("deleteName").value = item['Name'];
+                document.getElementById("deleteDescription").value = item['Description'];
+                document.getElementById("deleteLocation").value = item['Location'];
+            }
+        </script>
+
+{% endblock %}

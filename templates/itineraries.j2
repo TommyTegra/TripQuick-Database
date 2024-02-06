@@ -1,0 +1,280 @@
+{% extends "main.j2" %}
+{% block title %}Itineraries{% endblock %}
+{% block name %}<h2>Itineraries</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 11/30/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+            <!-- Loops through every item -->
+            {% for item in data %}
+                <tr>
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateItinerary" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteItinerary" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p>To see activities or travelers associated with these itineraries, visit <a href="/activities-itineraries">Activities_Itineraries</a> or <a href="/travelers-itineraries">Travelers_Itineraries</a>, respectively.</p>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+
+<!-- Insert a new itinerary -->
+        <form id="InsertItinerary" action="/itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Add Itinerary</Strong></legend>
+                <label for="departureFlightID"> Departure Flight </label> 
+                <select id="departureFlightID" name="departureFlightID">
+                    <option value=""> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="returnFlightID"> Return Flight </label> 
+                <select id="returnFlightID" name="returnFlightID">
+                    <option value=""> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="stayID"> Accommodation </label> 
+                <select id="stayID" name="stayID">
+                    <option value=""> None </option>
+                    {% for item in stayData %}
+                        <option value="{{item['stayID']}}">{{item['Accommodations']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="home"> Home </label> 
+                <input type="text" id="home" name="home" placeholder="Los Angeles" required>
+                
+                <label for="destination"> Destination </label> 
+                <input type="text" id="destination" name="destination" placeholder="Austin" required>
+
+                <label for="assocTraveler"> Associated Traveler </label> 
+                <select id="assocTraveler" name="assocTraveler" required>
+                    <option value="" disabled selected>Select a Traveler</option>
+                    {% for item in travelerData %}
+                        <option value="{{item['travelerID']}}">{{item['name']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" value="Insert Itinerary" id="InsertItinerary" name="InsertItinerary">Add Itinerary</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("departureFlightID").value = "None";
+                document.getElementById("returnFlightID").value = "None";
+                document.getElementById("stayID").value = "None";
+                document.getElementById("home").value = "";
+                document.getElementById("destination").value = "";
+                document.getElementById("assocTraveler").value = "";
+            }
+        </script>
+
+
+<!-- Update a selected itinerary -->
+        <form id="UpdateItinerary" action="/itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Update Itinerary</Strong></legend>
+                <label> Plan ID: </label>
+                <input type="number" id="updatePlanID" name="planID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="departureFlightID"> Departure Flight </label> 
+                <select id="updateDepartureFlightID" name="departureFlightID">
+                    <option value=""> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="returnFlightID"> Return Flight </label> 
+                <select id="updateReturnFlightID" name="returnFlightID">
+                    <option value=""> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="stayID"> Accommodation </label> 
+                <select id="updateStayID" name="stayID">
+                    <option value=""> None </option>
+                    {% for item in stayData %}
+                        <option value="{{item['stayID']}}">{{item['Accommodations']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="home"> Home </label> 
+                <input type="text" id="updateHome" name="home" placeholder="Los Angeles" required>
+                
+                <label for="destination"> Destination </label> 
+                <input type="text" id="updateDestination" name="destination" placeholder="Austin" required>
+                
+                <button type="submit" value="Update Itinerary" id="UpdateItinerary" name="UpdateItinerary">Update Itinerary</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updatePlanID").value = '';
+                document.getElementById("updateDepartureFlightID").value = '';
+                document.getElementById("updateReturnFlightID").value = '';
+                document.getElementById("updateStayID").value = '';
+                document.getElementById("updateHome").value = '';
+                document.getElementById("updateDestination").value = '';
+            }
+            // Populates form fields when Edit is clicked
+            function insertID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form 
+                if (item['Departure Ticket'] === null || item['Departure Ticket'] === 'None') {
+                    document.getElementById("updateDepartureFlightID").value = '';
+                } else {
+                    index = searchVal(document.getElementById("updateDepartureFlightID"), item['Departure Ticket'])
+                    document.getElementById("updateDepartureFlightID").value = document.getElementById("updateDepartureFlightID").options[index].value;
+                }
+                if (item['Return Ticket'] === null || item['Return Ticket'] === 'None') {
+                    document.getElementById("updateReturnFlightID").value = '';
+                } else {
+                    index = searchVal(document.getElementById("updateReturnFlightID"), item['Return Ticket'])
+                    document.getElementById("updateReturnFlightID").value = document.getElementById("updateReturnFlightID").options[index].value;
+                }
+                if (item['Accommodation'] === null || item['Accommodation'] === 'None') {
+                    document.getElementById("updateStayID").value = '';
+                } else {
+                    index = searchVal(document.getElementById("updateStayID"), item['Accommodation'])
+                    document.getElementById("updateStayID").value = document.getElementById("updateStayID").options[index].value;
+                }
+                document.getElementById("updatePlanID").value = item['Itinerary ID'];
+                document.getElementById("updateHome").value = item['Home'];
+                document.getElementById("updateDestination").value = item['Destination'];
+            }
+            // Returns the choice value of the dropdown list for form population on click
+            function searchVal(drop, searchText) {
+                for (var i = 0; i < drop.length; i++) {
+                    if (drop.options[i].text === searchText) {
+                        return i;
+                    }
+                }
+            }
+        </script>
+        
+        
+<!-- Delete a selected itinerary -->
+        <form id="DeleteItinerary" action="/itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Itinerary</Strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <label> Plan ID: </label>
+                <input type="number" id="deletePlanID" name="planID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="departureFlightID"> Departure Flight </label> 
+                <select id="deleteDepartureFlightID" name="departureFlightID" disabled required>
+                    <option value="None"> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="returnFlightID"> Return Flight </label> 
+                <select id="deleteReturnFlightID" name="returnFlightID" disabled required>
+                    <option value="None"> None </option>
+                    {% for item in flightData %}
+                        <option value="{{item['flightID']}}">{{item['Flights']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="stayID"> Accommodation </label> 
+                <select id="deleteStayID" name="stayID" disabled required>
+                    <option value="None"> None </option>
+                    {% for item in stayData %}
+                        <option value="{{item['stayID']}}">{{item['Accommodations']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="home"> Home </label> 
+                <input type="text" id="deleteHome" name="home" disabled required>
+                
+                <label for="destination"> Destination </label> 
+                <input type="text" id="deleteDestination" name="destination" disabled required>
+                
+                <button type="submit" value="Delete Itinerary" id="DeleteItinerary" name="DeleteItinerary">Delete Itinerary</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deletePlanID").value = '';
+                document.getElementById("deleteDepartureFlightID").value = 'None';
+                document.getElementById("deleteReturnFlightID").value = 'None';
+                document.getElementById("deleteStayID").value = 'None';
+                document.getElementById("deleteHome").value = '';
+                document.getElementById("deleteDestination").value = '';
+            }
+            // Populates form fields when Delete is clicked 
+            function deleteID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form
+                if (item['Departure Ticket'] === null || item['Departure Ticket'] === 'None') {
+                    document.getElementById("deleteDepartureFlightID").value = 'None';
+                } else {
+                    index = searchVal(document.getElementById("deleteDepartureFlightID"), item['Departure Ticket'])
+                    document.getElementById("deleteDepartureFlightID").value = document.getElementById("deleteDepartureFlightID").options[index].value;            
+                }
+                if (item['Return Ticket'] === null || item['Return Ticket'] === 'None') {
+                    document.getElementById("deleteReturnFlightID").value = 'None';
+                } else {
+                    index = searchVal(document.getElementById("deleteReturnFlightID"), item['Return Ticket'])
+                    document.getElementById("deleteReturnFlightID").value = document.getElementById("deleteReturnFlightID").options[index].value;
+                }
+                if (item['Accommodation'] === null || item['Accommodation'] === 'None') {
+                    document.getElementById("deleteStayID").value = 'None';
+                } else {
+                    index = searchVal(document.getElementById("deleteStayID"), item['Accommodation'])
+                    document.getElementById("deleteStayID").value = document.getElementById("deleteStayID").options[index].value;
+                }
+                document.getElementById("deletePlanID").value = item['Itinerary ID'];
+                document.getElementById("deleteHome").value = item['Home'];
+                document.getElementById("deleteDestination").value = item['Destination'];
+            }
+            // Returns the choice index of the dropdown list for form population on click
+            function searchVal(drop, searchText) {
+                for (var i = 0; i < drop.length; i++) {
+                    if (drop.options[i].text === searchText) {
+                        return i;
+                    }
+                }
+            }
+        </script>
+
+{% endblock %}

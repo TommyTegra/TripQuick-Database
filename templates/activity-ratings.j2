@@ -1,0 +1,233 @@
+{% extends "main.j2" %}
+{% block title %}ActivityRatings{% endblock %}
+{% block name %}<h2>ActivityRatings</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 11/30/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+        
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+            <!-- table headers hardcoded because additional keys were passed that shouldn't be shown -->
+                    <tr>
+                        <th scope="col" data-field="Rating ID" data-filter-control="input">Rating ID</th>
+                        <th scope="col" data-field="Activity Name" data-filter-control="input">Activity Name</th>
+                        <th scope="col" data-field="Traveler Name" data-filter-control="input">Traveler Name</th>
+                        <th scope="col" data-field="Rating" data-filter-control="input">Rating</th>
+                        <th scope="col" data-field="Review" data-filter-control="input">Review</th>
+                    </tr>
+
+            </thead>
+
+            <tbody>
+            <!-- Loops through every item -->
+                {% for item in data %}
+                <tr>
+                    <td>{{item['Rating ID']}}</td>
+                    <td>{{item['Activity Name']}}</td>
+                    <td>{{item['Traveler Name']}}</td>
+                    <td>{{"Liked" if item['Rating'] else "Disliked"}}</td>
+                    <td>{{item['Review']}}</td>
+                    <td><a href="#UpdateActivityRating" onClick="insertID({{ item }})">Edit</a></td>
+                    <td><a href="#DeleteActivityRating" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        {# <label> Filter by
+            <select type="text" name="rating" required>
+                <option>None</option>
+                <option value=True>Liked</option>
+                <option value=False>Disliked</option>
+            </select>
+        <button type="submit" id="filter">Filter</button>
+        </label> #}
+
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+<!-- Insert a new Rating -->
+        <form id="InsertActivityRating" action="/activity-ratings" method="post">
+            <fieldset>     
+                <legend>Add to ActivityRatings</legend>
+
+                <label for="activityID"> Activity Name </label>
+                    <select id="activityID" name="activityID" required>
+                        <option value="" disabled selected> Choose Activity </option>
+                        {% for item in activitytData %}
+                            <option value="{{item['activityID']}}">{{item['activityName']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="travelerID"> Traveler Name </label>
+                    <select type="text" id="travelerID" name="travelerID" required>
+                        <option value="" disabled selected> Choose Traveler </option>
+                        {% for item in travelerData %}
+                            <option value="{{item['travelerID']}}">{{item['name']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="rating"> Rating </label>
+                    <select type="number" id="rating" name="rating" required>
+                        <option value="" disabled selected> Choose Rating </option>
+                        <option value=1>Liked</option>
+                        <option value=0>Disliked</option>
+
+                    </select>
+
+                <label> Review </label>
+                <textarea type="text" id="review" name="review" placeholder="What a great experience!"></textarea>
+
+                <button type="submit" value="Insert ActivityRating" id="InsertActivityRating" name="InsertActivityRating">Add ActivityRating</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("activityID").value = "";
+                document.getElementById("travelerID").value = "";
+                document.getElementById("rating").value = "";
+                document.getElementById("review").value = "";
+            }
+            // window.addEventListener("load", (event) => {
+            //     clearText();
+            // })
+        </script>
+
+
+<!-- Update a Rating -->
+        <form id="UpdateActivityRating" action="/activity-ratings" method="post">
+            <fieldset>     
+                <legend>Update ActivityRatings</legend>
+
+                <label>ratingID:</label>
+                <input type="number" id="updateRatingID" name="ratingID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="activityID"> Activity Name </label>
+                    <select type="text" id="updateActivityID" name="activityID" required>
+                        <option value="" disabled selected> Choose Activity </option>
+                        {% for item in activitytData %}
+                            <option value="{{item['activityID']}}">{{item['activityName']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="travelerID"> Traveler Name </label>
+                    <select type="text" id="updateTravelerID" name="travelerID" required>
+                        <option value="" disabled selected> Choose Traveler </option>
+                        {% for item in travelerData %}
+                            <option value="{{item['travelerID']}}">{{item['name']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="rating"> Rating </label>
+                    <select type="number" id="updateRating" name="rating" required>
+                        <option value="" disabled selected> Choose Rating </option>
+                        <option value=1>Liked</option>
+                        <option value=0>Disliked</option>
+                    </select>
+
+                <label> Review </label>
+                <textarea type="text" id="updateReview" name="review" placeholder="What a great experience!"></textarea>
+
+                
+                <button type="submit" value="Update ActivityRating" id="UpdateActivityRating" name="UpdateActivityRating">Update Activity Rating</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updateRatingID").value = "";
+                document.getElementById("updateActivityID").value = "";
+                document.getElementById("updateTravelerID").value = "";
+                document.getElementById("updateRating").value = "";
+                document.getElementById("updateReview").value = "";
+                document.getElementById("previewUpdateRatingID").innerHTML = "Select 'Edit' above.";
+
+            }
+            // Populates form fields when Edit is clicked
+            function insertID(item) {
+                document.getElementById("updateRatingID").value = item['Rating ID'];
+                document.getElementById("updateActivityID").value = item['Activity ID'];
+                document.getElementById("updateTravelerID").value = item['Traveler ID'];
+                document.getElementById("updateRating").value = item['Rating'];
+                document.getElementById("updateReview").value = item['Review'];
+                document.getElementById("previewUpdateRatingID").innerHTML =  item['Rating ID'];
+            }
+        </script>
+
+<!-- Delete a Rating -->
+        <form id="DeleteActivityRating" action="/activity-ratings" method="post">
+            <fieldset>     
+                <legend>Delete ActivityRatings</legend>
+
+                <p>Are you sure you wish to delete the following?</p>
+
+
+                <label>ratingID:</label>
+                <input type="number" id="deleteRatingID" name="ratingID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="activityID"> Activity Name </label>
+                    <select type="text" id="deleteActivityID" name="activityID" disabled required>
+                        <option value="" disabled selected> </option>
+                        {% for item in activitytData %}
+                            <option value="{{item['activityID']}}">{{item['activityName']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="travelerID"> Traveler Name </label>
+                    <select type="text" id="deleteTravelerID" name="travelerID" disabled required>
+                        <option value="" disabled selected> </option>
+                        {% for item in travelerData %}
+                            <option value="{{item['travelerID']}}">{{item['name']}}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="rating"> Rating </label>
+                    <select type="number" id="deleteRating" name="rating" disabled required>
+                        <option value="" disabled selected> </option>
+                        <option value=1>Liked</option>
+                        <option value=0>Disliked</option>
+                    </select>
+
+                <label> Review </label>
+                <textarea type="text" id="deleteReview" name="review" disabled required></textarea>
+
+                
+                <button type="submit" value="Delete ActivityRating" id="DeleteActivityRating" name="DeleteActivityRating">Delete Activity Rating</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deleteRatingID").value = "";
+                document.getElementById("deleteActivityID").value = "";        
+                document.getElementById("deleteTravelerID").value = "";
+                document.getElementById("deleteRating").value = "";
+                document.getElementById("deleteReview").value = "";
+
+            }
+            // Populates form fields when Delete is clicked 
+            function deleteID(item) {
+                document.getElementById("deleteRatingID").value = item['Rating ID'];
+                document.getElementById("deleteActivityID").value = item['Activity ID'];
+                document.getElementById("deleteTravelerID").value = item['Traveler ID'];
+                document.getElementById("deleteRating").value = item['Rating'];
+                document.getElementById("deleteReview").value = item['Review'];
+            }
+        </script>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "main.j2" %}
+{% block title %}Unfinished Page{% endblock %}
+{% block style %}{% endblock %}
+{% block name %}<h2>Unfinished Page</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+        <p>
+            This page is an unfinished page; what did you expect?
+        </p>
+        <p>
+            I made this page because it was the placeholder from earlier steps and I wanted to keep it. It was nice to switch to this page for a quick laugh when something else was frustrating to code.<br />
+            Thanks for visiting! (^_^)
+        </p>
+
+        <img 
+            src="../static/construction.jpg"
+            alt="Penguin with stop sign"
+        />    
+
+{% endblock %}

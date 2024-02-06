@@ -1,0 +1,150 @@
+{% extends "main.j2" %}
+{% block title %}Travelers{% endblock %}
+{% block name %}<h2>Travelers</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 11/16/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <!-- Loops through every item -->
+                    {% for item in data %}
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateTraveler" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteTraveler" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        <p>To see itineraries associated with these travelers, visit <a href="/travelers-itineraries">Travelers_Itineraries</a>.</p>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+
+<!-- Insert a new traveler -->
+        <form id="AddTraveler" action="/travelers" method="post">
+            <fieldset>     
+                <legend><Strong>Add Traveler</Strong></legend>
+                <label for="name"> Name </label> 
+                <input type="text" id="name" name="name" placeholder="John Doe" required>
+                
+                <label for="email"> eMail </label> 
+                <input type="email" id="email" name="email" placeholder="johndoe@domain.com" required>
+                
+                <label for="phone"> Phone </label> 
+                <input type="tel" id="phone" name="phone" placeholder="123-456-7890" required>
+                
+                <button type="submit" value="Add Traveler" id="AddTraveler" name="AddTraveler">Add Traveler</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("phone").value = "";
+            }
+        </script>
+
+
+<!-- Update a selected traveler -->
+        <form id="UpdateTraveler" action="/travelers" method="post">
+            <fieldset>     
+                <legend><Strong>Update Traveler</Strong></legend>
+                <label> Traveler ID: </label>
+                <input type="number" id="updateTravelerID" name="travelerID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="name"> Name </label> 
+                <input type="text" id="updateName" name="name" placeholder="John Doe" required>
+                
+                <label for="email"> eMail </label> 
+                <input type="email" id="updateEmail" name="email" placeholder="johndoe@domain.com" required>
+                
+                <label for="phone"> Phone </label> 
+                <input type="text" id="updatePhone" name="phone" placeholder="123-456-7890" required>
+                
+                <button type="submit" value="Update Traveler" id="UpdateTraveler" name="UpdateTraveler">Update Traveler</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updateName").value = "";
+                document.getElementById("updateEmail").value = "";
+                document.getElementById("updatePhone").value = "";
+                document.getElementById("updateTravelerID").value = "";
+            }
+            // Populates field when Edit is clicked
+            function insertID(item) {
+                document.getElementById("updateTravelerID").value = item['Traveler ID'];
+                document.getElementById("updateName").value = item['Name'];
+                document.getElementById("updateEmail").value = item['Email address'];
+                document.getElementById("updatePhone").value = item['Phone number'];
+            }
+        </script>
+        
+        
+<!-- Delete a selected traveler -->
+        <form id="DeleteTraveler" action="/travelers" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Traveler</Strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <label> Traveler ID: </label>
+                <input type="number" id="deleteTravelerID" name="travelerID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="name"> Name </label> 
+                <input type="text" id="deleteName" name="name" disabled required>
+                
+                <label for="email"> eMail </label> 
+                <input type="email" id="deleteEmail" name="email" disabled required>
+                
+                <label for="phone"> Phone </label> 
+                <input type="text" id="deletePhone" name="phone" disabled required>
+                
+                <button type="submit" value="Delete Traveler" id="DeleteTraveler" name="DeleteTraveler">Delete Traveler</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deleteName").value = "";
+                document.getElementById("deleteEmail").value = "";
+                document.getElementById("deletePhone").value = "";
+                document.getElementById("deleteTravelerID").value = "";
+            }
+            // Populates field when Delete is clicked
+            function deleteID(item) {
+                document.getElementById("deleteTravelerID").value = item['Traveler ID'];
+                document.getElementById("deleteName").value = item['Name'];
+                document.getElementById("deleteEmail").value = item['Email address'];
+                document.getElementById("deletePhone").value = item['Phone number'];
+            }
+        </script>
+
+{% endblock %}

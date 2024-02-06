@@ -1,0 +1,210 @@
+{% extends "main.j2" %}
+{% block title %}Accommodations{% endblock %}
+{% block name %}<h2>Accommodations</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 11/30/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <!-- Loops through every item -->
+                    {% for item in data %}
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateAccommodation" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteAccommodation" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+
+<!-- Insert a new accommodation -->
+        <form id="AddAccommodation" action="/accommodations" method="post">
+            <fieldset>     
+                <legend><Strong>Add Accommodation</Strong></legend>
+                <label for="propertyName"> Name </label> 
+                <input type="text" id="propertyName" name="propertyName" placeholder="Hilton">
+
+                <label for="propertyAddress"> Address </label> 
+                <input type="text" id="propertyAddress" name="propertyAddress" placeholder="123 Street, City, State, ZIP" required>
+                
+                <label for="propertyPhone"> Phone </label> 
+                <input type="text" id="propertyPhone" name="propertyPhone" placeholder="123-456-7890">
+
+                <label for="propertyEmail"> eMail </label> 
+                <input type="email" id="propertyEmail" name="propertyEmail" placeholder="johndoe@domain.com" required>
+
+                <label for="checkInDate"> Check-In Date </label> 
+                <input type="date" id="checkInDate" name="checkInDate" required>
+
+                <label for="checkOutDate"> Check-Out Date </label> 
+                <input type="date" id="checkOutDate" name="checkOutDate" required>
+                
+                <button type="submit" value="Add Accommodation" id="AddAccommodation" name="AddAccommodation">Add Accommodation</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("propertyName").value = "";
+                document.getElementById("propertyAddress").value = "";
+                document.getElementById("propertyPhone").value = "";
+                document.getElementById("propertyEmail").value = "";
+                document.getElementById("checkInDate").value = "";
+                document.getElementById("checkOutDate").value = "";
+            }
+        </script>
+
+
+<!-- Update a selected accommodation -->
+        <form id="UpdateAccommodation" action="/accommodations" method="post">
+            <fieldset>     
+                <legend><Strong>Update Accommodation</Strong></legend>
+                <label> Stay ID: </label>
+                <input type="number" id="updateStayID" name="stayID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="propertyName"> Name </label> 
+                <input type="text" id="updatePropertyName" name="propertyName" placeholder="Hilton">
+
+                <label for="propertyAddress"> Address </label> 
+                <input type="text" id="updatePropertyAddress" name="propertyAddress" placeholder="123 Street, City, State, ZIP" required>
+                
+                <label for="propertyPhone"> Phone </label> 
+                <input type="text" id="updatePropertyPhone" name="propertyPhone" placeholder="123-456-7890">
+
+                <label for="propertyEmail"> eMail </label> 
+                <input type="email" id="updatePropertyEmail" name="propertyEmail" placeholder="johndoe@domain.com" required>
+
+                <label for="checkInDate"> Check-In Date </label> 
+                <input type="date" id="updateCheckInDate" name="checkInDate" required>
+
+                <label for="checkOutDate"> Check-Out Date </label> 
+                <input type="date" id="updateCheckOutDate" name="checkOutDate" required>
+                
+                <button type="submit" value="Update Accommodation" id="UpdateAccommodation" name="UpdateAccommodation">Update Accommodation</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updatePropertyName").value = "";
+                document.getElementById("updatePropertyAddress").value = "";
+                document.getElementById("updatePropertyPhone").value = "";
+                document.getElementById("updatePropertyEmail").value = "";
+                document.getElementById("updateCheckInDate").value = "";
+                document.getElementById("updateCheckOutDate").value = "";
+                document.getElementById("updateStayID").value = "";
+            }
+            // Populates field when Edit is clicked
+            function insertID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form 
+                if (item['Name'] === null || item['Name'] === 'None') {
+                    document.getElementById("updatePropertyName").value = "";
+                } else {
+                    document.getElementById("updatePropertyName").value = item['Name'];
+                }
+                if (item['Phone'] === null || item['Phone'] === 'None') {
+                    document.getElementById("updatePropertyPhone").value = "";
+                } else {
+                    document.getElementById("updatePropertyPhone").value = item['Phone'];
+                }
+                document.getElementById("updatePropertyAddress").value = item['Address'];
+                document.getElementById("updatePropertyEmail").value = item['Email'];
+                document.getElementById("updateCheckInDate").value = item['Check-In Date'];
+                document.getElementById("updateCheckOutDate").value = item['Check-Out Date'];
+                document.getElementById("updateStayID").value = item['Stay ID'];
+            }
+        </script>
+        
+        
+<!-- Delete a selected accommodation -->
+        <form id="DeleteAccommodation" action="/accommodations" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Accommodation</Strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <label> Stay ID: </label>
+                <input type="number" id="deleteStayID" name="stayID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="propertyName"> Name </label> 
+                <input type="text" id="deletePropertyName" name="propertyName" disabled>
+                
+                <label for="propertyAddress"> Address </label> 
+                <input type="text" id="deletePropertyAddress" name="propertyAddress" disabled required>
+                
+                <label for="propertyPhone"> Phone </label> 
+                <input type="text" id="deletePropertyPhone" name="propertyPhone" disabled>
+
+                <label for="propertyEmail"> eMail </label> 
+                <input type="email" id="deletePropertyEmail" name="propertyEmail" disabled required>
+                
+                <label for="checkInDate"> Check-In Date </label> 
+                <input type="date" id="deleteCheckInDate" name="checkInDate" disabled required>
+
+                <label for="checkOutDate"> Check-Out Date </label> 
+                <input type="date" id="deleteCheckOutDate" name="checkOutDate" disabled required>
+                
+                <button type="submit" value="Delete Accommodation" id="DeleteAccommodation" name="DeleteAccommodation">Delete Accommodation</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deletePropertyName").value = "";
+                document.getElementById("deletePropertyAddress").value = "";
+                document.getElementById("deletePropertyPhone").value = "";
+                document.getElementById("deletePropertyEmail").value = "";
+                document.getElementById("deleteCheckInDate").value = "";
+                document.getElementById("deleteCheckOutDate").value = "";
+                document.getElementById("deleteStayID").value = "";
+            }
+            // Populates form fields when Delete is clicked
+            function deleteID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form 
+                if (item['Name'] === null || item['Name'] === 'None') {
+                    document.getElementById("deletePropertyName").value = "";
+                } else {
+                    document.getElementById("deletePropertyName").value = item['Name'];
+                }
+                if (item['Phone'] === null || item['Phone'] === 'None') {
+                    document.getElementById("deletePropertyPhone").value = "";
+                } else {
+                    document.getElementById("deletePropertyPhone").value = item['Phone'];
+                }
+                document.getElementById("deletePropertyAddress").value = item['Address'];
+                document.getElementById("deletePropertyEmail").value = item['Email'];
+                document.getElementById("deleteCheckInDate").value = item['Check-In Date'];
+                document.getElementById("deleteCheckOutDate").value = item['Check-Out Date'];
+                document.getElementById("deleteStayID").value = item['Stay ID'];
+            }
+        </script>
+
+{% endblock %}
+          

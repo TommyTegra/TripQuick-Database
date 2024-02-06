@@ -1,0 +1,187 @@
+{% extends "main.j2" %}
+{% block title %}Travelers_Itineraries{% endblock %}
+{% block name %}<h2>Travelers_Itineraries</h2>{% endblock %}
+{% block content %}
+        {{ super() }}
+
+<!-- 
+    Citation for the following data gathering:
+    Date: 12/9/2023
+    Based on: [redacted]
+    Source URL: [redacted]
+-->
+
+        <!-- Access the data that was passed from the app.py -->
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <!-- Loops through the columns name -->
+                    {% for key in data[0].keys() %}
+                        <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+            <!-- Loops through every item -->
+            {% for item in data %}
+                <tr>
+                        <!-- For each item, get key -->
+                        {% for key in item.keys() %} 
+                            <td> {{item[key]}} </td>
+                        {% endfor %}
+                            <!-- Edit and delete button/hyperlinks -->
+                            <td><a href="#UpdateTravelerItinerary" onClick="insertID({{ item }})">Edit</a></td>
+                            <td><a href="#DeleteTravelerItinerary" onClick="deleteID({{ item }})">Delete</a></td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>There is no data for this table at the moment. Please add an item below.</p>
+        {% endif %}
+
+
+<!-- Insert a new traveler - itinerary relationship -->
+        <form id="AddTravelerItinerary" action="/travelers-itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Add Traveler to Itinerary</Strong></legend>
+                <label for="planID"> Itinerary </label> 
+                <select id="planID" name="planID" required>
+                    <option value="" disabled selected> Choose Itinerary </option>
+                    {% for item in itineraryData %}
+                        <option value="{{item['planID']}}">{{item['Itinerary']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="travelerID"> Traveler </label> 
+                <select id="travelerID" name="travelerID" required>
+                    <option value="" disabled selected> Choose Traveler </option>
+                    {% for item in travelerData %}
+                        <option value="{{item['travelerID']}}">{{item['Traveler']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" value="Add Traveler Itinerary" id="AddTravelerItinerary" name="AddTravelerItinerary">Add Traveler to Itinerary</button>
+                <button type="button" onClick="clearText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearText() {
+                document.getElementById("planID").value = "";
+                document.getElementById("travelerID").value = "";
+            }
+        </script>
+
+
+<!-- Update a selected traveler to itinerary relationship -->
+        <form id="UpdateTravelerItinerary" action="/travelers-itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Update Traveler to Itinerary</Strong></legend>
+                <label> Traveler - Itinerary ID: </label>
+                <input type="number" id="updateTravelerItineraryID" name="travelerItineraryID" placeholder="Select 'Edit' above." readonly required>
+
+                <label for="planID"> Itinerary </label> 
+                <select id="updatePlanID" name="planID">
+                    <option value="" disabled selected> Choose Itinerary </option>
+                    {% for item in itineraryData %}
+                        <option value="{{item['planID']}}">{{item['Itinerary']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="travelerID"> Traveler </label> 
+                <select id="updateTravelerID" name="travelerID">
+                    <option value="" disabled selected> Choose Traveler </option>
+                    {% for item in travelerData %}
+                        <option value="{{item['travelerID']}}">{{item['Traveler']}}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" value="Update Traveler Itinerary" id="UpdateTravelerItinerary" name="UpdateTravelerItinerary">Update Relationship</button>
+                <button type="button" onClick="clearUpdateText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearUpdateText() {
+                document.getElementById("updatePlanID").value = '';
+                document.getElementById("updateTravelerID").value = '';
+                document.getElementById("updateTravelerItineraryID").value = '';
+            }
+            // Populates form fields when Edit is clicked
+            function insertID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form 
+                document.getElementById("updateTravelerItineraryID").value = item['Travelers - Itineraries ID'];
+                planIndex = searchVal(document.getElementById("updatePlanID"), item['Itinerary'])
+                document.getElementById("updatePlanID").value = document.getElementById("updatePlanID").options[planIndex].value;
+                travelerIndex = searchVal(document.getElementById("updateTravelerID"), item['Traveler'])
+                document.getElementById("updateTravelerID").value = document.getElementById("updateTravelerID").options[travelerIndex].value;
+            }
+            // Returns the choice value of the dropdown list for form population on click
+            function searchVal(drop, searchText) {
+                for (var i = 0; i < drop.length; i++) {
+                    if (drop.options[i].text === searchText) {
+                        return i;
+                    }
+                }
+            }
+        </script>
+        
+        
+<!-- Delete a selected traveler to itinerary relationship -->
+        <form id="DeleteTravelerItinerary" action="/travelers-itineraries" method="post">
+            <fieldset>     
+                <legend><Strong>Delete Traveler to Itinerary Relationship</Strong></legend>
+                <p>Are you sure you wish to delete the following?</p>
+                <label> Traveler - Itinerary ID: </label>
+                <input type="number" id="deleteTravelerItineraryID" name="travelerItineraryID" placeholder="Select 'Delete' above." readonly required>
+
+                <label for="planID"> Itinerary </label> 
+                <select id="deletePlanID" name="planID" disabled required>
+                    <option value=""> None </option>
+                    {% for item in itineraryData %}
+                        <option value="{{item['planID']}}">{{item['Itinerary']}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="travelerID"> Traveler </label> 
+                <select id="deleteTravelerID" name="travelerID" disabled required>
+                    <option value=""> None </option>
+                    {% for item in travelerData %}
+                        <option value="{{item['travelerID']}}">{{item['Traveler']}}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" value="Delete Traveler Itinerary" id="DeleteTravelerItinerary" name="DeleteTravelerItinerary">Delete Relationship</button>
+                <button type="button" onClick="clearDeleteText()">Cancel</button>
+            </fieldset>
+        </form>
+        <script>
+            // Clears form fields when Cancel is clicked
+            function clearDeleteText() {
+                document.getElementById("deletePlanID").value = '';
+                document.getElementById("deleteTravelerID").value = '';
+                document.getElementById("deleteTravelerItineraryID").value = '';
+            }
+            // Populates form fields when Delete is clicked 
+            function deleteID(item) {
+                // Takes any blank or None values and makes the form blank when it populates the form
+                document.getElementById("deleteTravelerItineraryID").value = item['Travelers - Itineraries ID'];
+                planIndex = searchVal(document.getElementById("deletePlanID"), item['Itinerary'])
+                document.getElementById("deletePlanID").value = document.getElementById("deletePlanID").options[planIndex].value;
+                travelerIndex = searchVal(document.getElementById("deleteTravelerID"), item['Traveler'])
+                document.getElementById("deleteTravelerID").value = document.getElementById("deleteTravelerID").options[travelerIndex].value;
+            }
+            // Returns the choice value of the dropdown list for form population on click
+            function searchVal(drop, searchText) {
+                for (var i = 0; i < drop.length; i++) {
+                    if (drop.options[i].text === searchText) {
+                        return i;
+                    }
+                }
+            }
+        </script>
+
+{% endblock %}

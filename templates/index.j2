@@ -1,0 +1,66 @@
+{% extends "main.j2" %}
+{% block title %}Index{% endblock %}
+{% block name %}<h2>Index</h2>{% endblock %}
+
+{% block content %}
+    {{ super() }}
+<!--
+    Citation for the following data gathering/operations:
+    Date: 11/30/2023
+    # Based on: [redacted]
+    Source URL: [redacted]
+-->
+    
+        <table>
+        <thead>
+            <tr>
+                <th>Tables in this Database</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+
+            <tbody>
+            <tr>
+                <td><a href="/travelers">Travelers</a></td>
+                <td>The individual/client who is tied to the travel itinerary</td>
+            </tr>
+            
+            <tr>
+                <td><a href="/itineraries">Itineraries</a></td>
+                <td>The general plan/trip the client is making</td>
+            </tr>
+
+            <tr>
+                <td><a href="/flights">Flights</a></td>
+                <td>The flights for the trip</td>
+            </tr>
+
+            <tr>
+                <td><a href="/accommodations">Accommodations</a></td>
+                <td>Temporary residence while the client is on the trip</td>
+            </tr>
+
+            <tr>
+                <td><a href="/activities">Activities</a></td>
+                <td>Undated activities that the client is participating in during the trip</td>
+            </tr>
+
+            <tr>
+                <td><a href="/activity-ratings">ActivityRatings</a></td>
+                <td>Ratings that the client can leave for any activities they partake in during the trip</td>
+            </tr>
+
+            <tr>
+                <td><a href="/activities-itineraries">Activities_Itineraries</a></td>
+                <td>Intersection table to facilitate the M:N relationship between Activities and Itineraries</td>
+            </tr>
+
+            <tr>
+                <td><a href="/travelers-itineraries">Travelers_Itineraries</a></td>
+                <td>Intersection table to facilitate the M:N relationship between Travelers and Itineraries</td>
+            </tr>
+            
+        </tbody>
+    </table>
+        
+{% endblock %}
