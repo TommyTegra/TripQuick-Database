@@ -1,7 +1,7 @@
 # TripQuick Database
 
 Contributors/Collaborators:  
-&emsp; Dylan Majewski  
+&emsp; Dylan Majewski
 &emsp; Tommy Nguyen  
 
 Theorical Overview:  
